@@ -1,5 +1,5 @@
 require 'sinatra'
 
-get '/' do
-	"Hello, sudoku"
+get '/' do 
+	erb :index
 end
