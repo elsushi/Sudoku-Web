@@ -5,6 +5,8 @@ div.box, div.cell {
 .cell input {
 	width: 30px;
 	height: 30px;
+	font-size: 20;
+	text-align: center;
 }
 
 #sudoku {
@@ -15,4 +17,5 @@ div.box, div.cell {
 body {
 	text-align: center;
 	font-family: Futura;
+	font-size: 35;
 }
