@@ -22,10 +22,15 @@ div.box {
 	background-color: white;
 }
 
+#flash {
+	margin: 20px;
+	font-size: 16;
+	}
+
 #sudoku {
 	font-size: 0;
 	text-align: center;
-
+	
 }
 
 body {
@@ -50,11 +55,11 @@ body {
 }
 
 .incorrect {
-	background-color: yellow;
+	background: yellow;
 }
 
 .value_provided {
-	background-color:  #DDD;
+	background:  #DDD;
 }
 
 @font-face {

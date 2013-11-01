@@ -1,9 +1,17 @@
 require 'sinatra'
+require 'sinatra/partial'
+require 'rack-flash'
+
+use Rack::Flash
+
 require_relative './lib/sudoku'
 require_relative './lib/cell'
 
+
+set :partial_template_engine, :erb
+set :session_secret, "12345"
+
 enable :sessions
-set :sessions, secret: "12345"
 
 def random_sudoku
 	seed = (1..9).to_a.shuffle + Array.new(81-9, 0)
@@ -14,7 +22,7 @@ end
 
 def puzzle(sudoku)
 	mangled_sudoku = sudoku.dup
-	(0..80).to_a.sample(rand(30)).each do |index|
+	(0..80).to_a.sample(rand(20..30)).each do |index|
 		mangled_sudoku[index] = 0
 	end
 	mangled_sudoku
@@ -26,13 +34,8 @@ get '/' do
 	@current_solution = session[:current_solution] || session[:puzzle]
 	@solution = session[:solution]
 	@puzzle = session[:puzzle]
-	# sudoku = random_sudoku
-	# session[:solution] = sudoku
-	# @current_solution = puzzle(sudoku)
 	erb :index
 end
-
-
 
 get '/solution' do
 
@@ -43,17 +46,11 @@ get '/solution' do
 end
 
 post '/' do
-#puts "cells: #{params["cell"].inspect}"
 cells = box_order_to_row_order(params["cell"])
-#puts "cells: #{session[:current_solution].inspect}"
 session[:current_solution] = cells.map{|value| value.to_i }.join
-#puts "cells: #{session[:current_solution].inspect}"
 session[:check_solution] = true
-
 redirect to("/")
 end 
-
-
 
 def box_order_to_row_order(cells)
 	boxes = cells.each_slice(9).to_a
@@ -79,13 +76,17 @@ end
 
 	def prepare_to_check_solution
 		@check_solution = session[:check_solution]
+		if @check_solution
+			flash[:notice] = "Incorrect values are highlighted in yellow"
+		end
 		session[:check_solution] = nil
 	end
 	
 
 helpers do
+	
 	def colour_class(solution_to_check, puzzle_value, current_solution_value, solution_value)
-		must_be_guessed = puzzle_value.to_i == 0
+		must_be_guessed = puzzle_value == 0
 		tried_to_guess = current_solution_value.to_i != 0
 		guessed_incorrectly = current_solution_value != solution_value
 
