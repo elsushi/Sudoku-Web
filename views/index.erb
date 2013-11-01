@@ -1,29 +1,35 @@
 <html>
 <head>
 	<title> Sudoku Game</title>
+	<link rel="icon" href="images/cat.jpg">
 	<link rel="stylesheet" type="text/css" href="/stylesheets/application.css">
 </head>
 <body>
 	<hi1>Life is too short for playing Sudoku</h1>
-<div id="sudoku">
-	<% 3.times do |row| %>
-		<div class='row'>
-			<% 3.times do |box| %>
-				<div class ="box">
-				<% 3.times do |cell_row| %>
-					<div class="cell-row">
-					<% 3.times do |cell| %>
-						<div class="cell">
-							<% cell_index = row * 27 + box * 3 + cell_row * 9 + cell %>
-							<% cell_value = @current_solution[cell_index] %>
-						<input type="text" maxlength="1" autocomplete="off" value=<%= cell_value%> >
+		<div id="sudoku">
+			<form action="/" method="post">
+			<% 3.times do |row| %>
+				<div class='row'>
+					<% 3.times do |box| %>
+					<div class ="box">
+						<% 3.times do |cell_row| %>
+						<div class="cell-row">
+							<% 3.times do |cell| %>
+								<div class="cell">
+									<% cell_index = row * 27 + box * 3 + cell_row * 9 + cell %>
+									<% cell_value = @current_solution[cell_index] %>									
+								<input class="<%= colour_class(@check_solution, @puzzle[cell_index], @current_solution[cell_index], @solution[cell_index])%>" name="cell[]" type="text" maxlength="1" autocomplete="off" value="<%= cell_value(cell_value) %>" >
+
+								</div>
+								<% end %>
+							</div>
+							<% end %>
+						</div>
+						<% end %>
 					</div>
-				<% end %>
-				</div>
-			<% end %>
-		</div>
-	<% end %>
-	</div>
-<% end %>		
-</body>
+					<% end %>		
+					
+				<button class="btn-6d">Check solution</button>
+			</form>
+			</body>
 </html>	
